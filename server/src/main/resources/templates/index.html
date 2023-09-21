@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+<title>WeatherList</title>
+</head>
+<body>
+  <h1>WeatherList</h1>
+  <form method="post" th:action="@{/update}" th:each="Weather : ${info}">
+    <table border="1">
+      <tr>
+          <th>気温[℃]</th>
+          <th>湿度[％]</th>
+          <th>気圧[hPa]</th>
+          <th>不快指数</th>
+          <th>日付</th>
+      </tr>
+      <tr th:if="${!#lists.isEmpty(info)}">
+          <th><p th:text="${Weather.temp}"/></th>
+          <th><p th:text="${Weather.humid}"/></th>
+          <th><p th:text="${Weather.pressure}"/></th>
+          <th><p th:text="${Weather.comfort}"/></th>
+          <th><p th:text="${Weather.date}"/></th>
+      </tr>
+    </table>
+  </form>
+
+  <h2>気温、湿度、気圧のグラフ</h2>
+  <canvas id="WeatherInfo"></canvas>
+  <script type="text/javascript" th:inline="javascript">
+  /*<![CDATA[*/
+  var ctx = document.getElementById("WeatherInfo").getContext('2d');
+  var WeatherInfo = new Chart(ctx, {
+      type: 'line',
+      data: {
+          // コントローラーで格納したlabelを変数式で取り出す
+          labels: /*[[ ${label} ]]*/,
+          datasets: [
+              {
+                  label: "気温[℃]",
+                  borderColor: 'rgb(255, 0, 0)',
+                  lineTension: 0,
+                  fill: false,
+                  // 上記と同様、labelを変数式で取り出し
+                  data: /*[[ ${tempArr} ]]*/,
+              },
+              {
+                  label: "湿度[％]",
+                  borderColor: 'rgb(0, 255, 0)',
+                  lineTension: 0,
+                  fill: false,
+                  // 上記と同様、labelを変数式で取り出し
+                  data: /*[[ ${humiArr} ]]*/,
+              },
+              {
+                  label: "気圧[hPa]",
+                  borderColor: 'rgb(0, 0, 255)',
+                  lineTension: 0,
+                  fill: false,
+                  // 上記と同様、labelを変数式で取り出し
+                  data: /*[[ ${pressArr} ]]*/,
+              },
+          ]
+      },
+      options: {
+          responsive: true,
+      }
+  });
+  /*]]>*/
+  </script>
+</body>
+</html>
