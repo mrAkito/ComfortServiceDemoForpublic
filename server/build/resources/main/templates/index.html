@@ -31,44 +31,71 @@
   <script type="text/javascript" th:inline="javascript">
   /*<![CDATA[*/
   var ctx = document.getElementById("WeatherInfo").getContext('2d');
-  var WeatherInfo = new Chart(ctx, {
-      type: 'line',
-      data: {
-          // コントローラーで格納したlabelを変数式で取り出すだけ。
-          labels: /*[[ ${label} ]]*/,
+  var ChartOption = {
+    responsive: true,
+    scales: {
+        yAxes: [{
+            id: "y-axis-1",   // Y軸のID
+            type: "linear",   // linear固定 
+            position: "left", // どちら側に表示される軸か？
+            ticks: {          // スケール
+                max: 100,
+                min: -20,
+                stepSize: 10
+            },
+        }, {
+            id: "y-axis-2",
+            type: "linear", 
+            position: "right",
+            ticks: {
+                max: 1200,
+                min: 700,
+                stepSize: 100
+            },
+        }],
+    }
+  };
+  var ChartData = {
+    // コントローラーで格納したlabelを変数式で取り出す
+    labels: /*[[ ${label} ]]*/,
           datasets: [
               {
+                  //type = 'line',
                   label: "気温[℃]",
                   borderColor: 'rgb(255, 0, 0)',
                   lineTension: 0,
                   fill: false,
-                  // 上記と同様、pointを変数式で取り出しているだけです。
-                  // data: /*[[ ${point} ]]*/,
+                  // 上記と同様、labelを変数式で取り出し
                   data: /*[[ ${tempArr} ]]*/,
+                  yAxisID: "y-axis-1", // 追加
               },
               {
+                  //type = 'line',
                   label: "湿度[％]",
                   borderColor: 'rgb(0, 255, 0)',
                   lineTension: 0,
                   fill: false,
-                  // 上記と同様、pointを変数式で取り出しているだけです。
-                  // data: /*[[ ${point} ]]*/,
+                  // 上記と同様、labelを変数式で取り出し
                   data: /*[[ ${humiArr} ]]*/,
+                  yAxisID: "y-axis-1", // 追加
               },
               {
+                  //type = 'line',
                   label: "気圧[hPa]",
                   borderColor: 'rgb(0, 0, 255)',
                   lineTension: 0,
                   fill: false,
-                  // 上記と同様、pointを変数式で取り出しているだけです。
-                  // data: /*[[ ${point} ]]*/,
+                  // 上記と同様、labelを変数式で取り出し
                   data: /*[[ ${pressArr} ]]*/,
+                  yAxisID: "y-axis-2", // 追加
               },
           ]
-      },
-      options: {
-          responsive: true,
-      }
+  }
+
+  var WeatherInfo = new Chart(ctx, {
+      type: 'line',
+      data: ChartData,
+      options:ChartOption,
   });
   /*]]>*/
   </script>
